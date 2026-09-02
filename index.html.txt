@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المركز الثقافي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <!-- الهيدر ومعلومات المركز -->
+    <header class="bg-blue-800 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold">المركز الثقافي التعليمي</h1>
+                <p class="text-sm mt-1">حصص خصوصي: إنجليزي | عربي | رياضيات (مدة الحصة: 40 دقيقة)</p>
+            </div>
+            <div class="mt-4 md:mt-0 text-left">
+                <a href="https://wa.me/962700000000" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold inline-flex items-center gap-2">
+                    💬 تواصل عبر واتساب
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 space-y-8">
+
+        <!-- لوحة التحكم السريعة -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-md border-r-4 border-blue-600">
+                <h3 class="text-gray-500">إجمالي الطلاب</h3>
+                <p id="totalStudents" class="text-3xl font-bold mt-2">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-r-4 border-green-600">
+                <h3 class="text-gray-500">المجموع المحصل</h3>
+                <p id="totalPaid" class="text-3xl font-bold mt-2">0 د.أ</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-r-4 border-red-600">
+                <h3 class="text-gray-500">المبالغ المتبقية (أقساط)</h3>
+                <p id="totalRemaining" class="text-3xl font-bold mt-2">0 د.أ</p>
+            </div>
+        </section>
+
+        <!-- نموذج تسجيل طالب جديد -->
+        <section class="bg-white p-6 rounded-xl shadow-md">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">تسجيل طالب جديد</h2>
+            <form id="studentForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="studentName" placeholder="اسم الطالب الرباعي" class="p-3 border rounded-lg" required>
+                <input type="text" id="nationalId" placeholder="الرقم الوطني" class="p-3 border rounded-lg" required>
+                <input type="tel" id="studentPhone" placeholder="رقم الهاتف" class="p-3 border rounded-lg" required>
+                
+                <select id="subject" class="p-3 border rounded-lg" required>
+                    <option value="">اختر المادة</option>
+                    <option value="إنجليزي">إنجليزي (40 دقيقة)</option>
+                    <option value="عربي">عربي (40 دقيقة)</option>
+                    <option value="رياضيات">رياضيات (40 دقيقة)</option>
+                </select>
+
+                <select id="teacher" class="p-3 border rounded-lg" required>
+                    <option value="">اختر الأستاذ</option>
+                    <option value="أ. أحمد (إنجليزي)">أ. أحمد (إنجليزي)</option>
+                    <option value="أ. محمد (عربي)">أ. محمد (عربي)</option>
+                    <option value="أ. سامي (رياضيات)">أ. سامي (رياضيات)</option>
+                </select>
+
+                <input type="number" id="totalFee" placeholder="الرسوم الفصلية الإجمالية" class="p-3 border rounded-lg" required>
+                <input type="number" id="paidFee" placeholder="المبلغ الدفوع حالياً" class="p-3 border rounded-lg" required>
+
+                <button type="submit" class="md:col-span-3 bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg">
+                    حفظ وتسجيل الطالب
+                </button>
+            </form>
+        </section>
+
+        <!-- جدول إدارة الطلاب والحضور والمالية -->
+        <section class="bg-white p-6 rounded-xl shadow-md overflow-x-auto">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">سجل الطلاب والحضور والمالية</h2>
+            <table class="w-full text-right border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 border-b">
+                        <th class="p-3">الطالب / الرقم الوطني</th>
+                        <th class="p-3">المادة والأساتذة</th>
+                        <th class="p-3">المالية (المدفوع / المتبقي)</th>
+                        <th class="p-3">تسجيل قسط</th>
+                        <th class="p-3">الحضور والغياب</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <!-- سيتم إضافة البيانات هنا عبر JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
