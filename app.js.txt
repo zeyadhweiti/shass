@@ -1,0 +1,100 @@
+let students = JSON.parse(localStorage.getItem('center_students')) || [];
+
+const studentForm = document.getElementById('studentForm');
+const studentTableBody = document.getElementById('studentTableBody');
+
+studentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const total = parseFloat(document.getElementById('totalFee').value);
+    const paid = parseFloat(document.getElementById('paidFee').value);
+
+    const newStudent = {
+        id: Date.now(),
+        name: document.getElementById('studentName').value,
+        nationalId: document.getElementById('nationalId').value,
+        phone: document.getElementById('studentPhone').value,
+        subject: document.getElementById('subject').value,
+        teacher: document.getElementById('teacher').value,
+        totalFee: total,
+        paidFee: paid,
+        remainingFee: total - paid,
+        attendance: { present: 0, absent: 0 }
+    };
+
+    students.push(newStudent);
+    saveAndRender();
+    studentForm.reset();
+});
+
+function saveAndRender() {
+    localStorage.setItem('center_students', JSON.stringify(students));
+    renderStudents();
+    updateStats();
+}
+
+function renderStudents() {
+    studentTableBody.innerHTML = '';
+    students.forEach((s, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b hover:bg-gray-50';
+        tr.innerHTML = `
+            <td class="p-3">
+                <div class="font-bold">${s.name}</div>
+                <div class="text-xs text-gray-500">${s.nationalId} | ${s.phone}</div>
+            </td>
+            <td class="p-3">
+                <div>${s.subject}</div>
+                <div class="text-xs text-blue-600">${s.teacher}</div>
+            </td>
+            <td class="p-3">
+                <div class="text-green-600 font-bold">مدفوع: ${s.paidFee}</div>
+                <div class="text-red-600 text-xs">متبقي: ${s.remainingFee}</div>
+            </td>
+            <td class="p-3">
+                <button onclick="payInstallment(${index})" class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm hover:bg-green-200">
+                    + دفع قسط
+                </button>
+            </td>
+            <td class="p-3">
+                <div class="flex items-center gap-2">
+                    <button onclick="markAttendance(${index}, 'present')" class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">
+                        حضور (${s.attendance.present})
+                    </button>
+                    <button onclick="markAttendance(${index}, 'absent')" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
+                        غياب (${s.attendance.absent})
+                    </button>
+                </div>
+            </td>
+        `;
+        studentTableBody.appendChild(tr);
+    });
+}
+
+function payInstallment(index) {
+    const amount = prompt("أدخل قيمة القسط المدفوع:");
+    if (amount && !isNaN(amount) && amount > 0) {
+        const val = parseFloat(amount);
+        students[index].paidFee += val;
+        students[index].remainingFee = students[index].totalFee - students[index].paidFee;
+        saveAndRender();
+    }
+}
+
+function markAttendance(index, type) {
+    if (type === 'present') students[index].attendance.present++;
+    if (type === 'absent') students[index].attendance.absent++;
+    saveAndRender();
+}
+
+function updateStats() {
+    document.getElementById('totalStudents').innerText = students.length;
+    const paid = students.reduce((sum, s) => sum + s.paidFee, 0);
+    const remaining = students.reduce((sum, s) => sum + s.remainingFee, 0);
+    document.getElementById('totalPaid').innerText = paid + " د.أ";
+    document.getElementById('totalRemaining').innerText = remaining + " د.أ";
+}
+
+// التشغيل الأول
+renderStudents();
+updateStats();
